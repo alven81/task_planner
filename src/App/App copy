@@ -1,0 +1,187 @@
+import React, { useEffect, useState } from 'react';
+import './app.scss';
+import Input from '../Elements/Input';
+import Button from '../Elements/Button';
+import setStorage from '../Storage/setStorage';
+import getStorage from '../Storage/getStorage';
+import Body from '../Body/Body';
+import { Edit } from '../Edit/Edit';
+
+export default function App(props) {
+    
+    let [inputValueName, setInputValueName] = useState('');
+    let [inputValueDescription, setInputValueDescription] = useState('');
+    let [editInputName, setEditInputName] = useState("");    
+    const [nameBtn] = useState('Add todo');
+    const [inputName] = useState("Name");
+    const [inputDescription] = useState("Description");
+    let [inputType, setInputType] = useState("");
+    let [statusValue] = useState(false);
+    let [todoList, setTodoList] = useState([]);
+    let [indexRecordForChange, setIndexRecordForChange] = useState(0);
+    let [editVisibleForChange, setEditVisibleForChange] = useState(false);
+
+
+    //ставить сразу в пропс 3 фукции
+    const handleUpdateInputValueName = (updatedValueName) => {
+        setInputValueName(updatedValueName)
+    }
+
+    const handleUpdateInputValueDescription = (updatedValueDescription) => {
+        setInputValueDescription(updatedValueDescription)
+    }
+
+    const handleUpdateChangeValue = (updatedChangeName) => {
+        setEditInputName(updatedChangeName)
+    }
+
+    const handleUpdateChangeButton = () => {
+        const name = editInputName;
+        const index = indexRecordForChange;
+        let todoList = getStorage();
+       console.log(name, index);
+        if (inputType === "name") {
+            todoList[index].name = name
+            } else {
+                todoList[index].description = name
+            }
+        localStorage.setItem("todoItemText", JSON.stringify(todoList));
+        setTodoList(todoList)
+        let editVisibleForChange = false;
+        setEditVisibleForChange(editVisibleForChange)
+    }
+
+    useEffect(() => {
+        const todoList = getStorage();
+        setTodoList(todoList)
+    }, [])
+
+
+    function deleteTodoRecord(index) {
+        let todoList = getStorage();
+        let tempArr = [];
+        tempArr = todoList.filter((_value, id) => id !== index);
+        setTodoList( tempArr );
+        localStorage.setItem("todoItemText", JSON.stringify(tempArr));
+    }
+
+    const changeStatus = (index, value) => {
+        let todoList = getStorage();
+        console.log(todoList, index, value);
+        todoList[index].status = !value;
+        localStorage.setItem("todoItemText", JSON.stringify(todoList));
+        setTodoList(todoList);
+    }
+
+    const addNewRecord = (id, date, name, description, status) => {
+        if (name && description) {
+            let updatedArr = {
+                id,
+                date,
+                name,
+                description,
+                status,
+            };
+            setTodoList(setStorage(updatedArr));
+            setInputValueName("");
+            setInputValueDescription("");
+        }
+    }
+
+    const idGenerator = () => {
+        console.log(getStorage().length === 0);
+        if (getStorage().length === 0) {
+            return 0
+        } else {
+            return getStorage()[getStorage().length-1].id + 1
+            }
+    }
+
+    const editTodoLabel = (e) => {
+        let editInputName = "";
+        let indexRecordForChange = e;
+        const todoList = getStorage();
+        editInputName = todoList[e].name;
+        let inputType = 'name';
+        let editVisibleForChange = true;
+        setEditInputName(editInputName)
+        setIndexRecordForChange(indexRecordForChange)
+        setEditVisibleForChange(editVisibleForChange)
+        setInputType(inputType)
+    }
+
+    const editTodoText = (e) => {
+        let editInputName = "";
+        let indexRecordForChange = e;
+        const todoList = getStorage();
+        editInputName = todoList[e].description;
+        let inputType = 'description';
+        let editVisibleForChange = true;
+        setEditInputName(editInputName)
+        setIndexRecordForChange(indexRecordForChange)
+        setEditVisibleForChange(editVisibleForChange)
+        setInputType(inputType)
+    }
+
+    return (
+        <section className='container'>
+            <div className='container_header'>
+                <div>
+                    <h1>My Todos</h1>
+                </div>
+                <div className='header_main'>
+                    <div className='header_input'>
+                        <Input
+                            value={inputValueName}
+                            handleUpdateValue={handleUpdateInputValueName}
+                            name={inputName}
+                            description={inputName} 
+                            classLabel="label" 
+                            classInput="label_input"
+                        />
+                        <Input 
+                            value={inputValueDescription}
+                            handleUpdateValue={handleUpdateInputValueDescription}
+                            name={inputDescription}
+                            description={inputDescription} 
+                            classLabel="label"
+                            classInput="label_input"
+                        />
+                    </div>
+                    <div className='header_button'>
+                        <Button
+                            name={nameBtn}
+                            className="button"
+                            onClick={() => {
+                                const id = idGenerator();
+                                const date = new Date().toLocaleDateString();
+                                const name = inputValueName;
+                                const description = inputValueDescription;
+                                const status = statusValue;
+                                addNewRecord(id, date, name, description, status);
+                                inputValueName = "";
+                                }
+                            }
+                        />
+                    </div> 
+                </div>
+            </div>
+            <div className='header'>
+                <Body 
+                    editTodoLabel={editTodoLabel}
+                    editTodoText={editTodoText}
+                    todoList={todoList}
+                    deleteTodoRecord={deleteTodoRecord}
+                    changeStatus={changeStatus}
+                />
+            </div>
+                <Edit
+                    editVisible = {editVisibleForChange}
+                    indexRecord = {indexRecordForChange}
+                    value = {editInputName}
+                    handleUpdateValue={handleUpdateChangeValue}
+                    handleUpdateButton={handleUpdateChangeButton}
+                />
+        </section>
+    )
+}

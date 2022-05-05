@@ -1,0 +1,23 @@
+.item_label {
+    color: rgb(250, 200, 0);
+    font-size: 30px;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    padding: 0;
+    cursor: pointer;
+    &_done {
+        font-size: 30px;
+        font-weight: 700;
+        margin: 0 0 10px 0;
+        padding: 0;
+        color: rgb(190, 20, 20);
+        text-decoration: line-through;
+    }
+    &_date{
+        font-size: 11px;
+        font-weight: 700;
+        color: rgb(160, 255, 0);
+        margin: 0 0 10px 0;
+        padding: 0;
+    }
+}

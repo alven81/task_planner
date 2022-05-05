@@ -1,0 +1,44 @@
+.header {
+    background-color: #343434;
+    height:75vh;
+    overflow: hidden;
+    overflow-y: auto;
+    border-radius: 5px;
+    position: relative;
+    &::-webkit-scrollbar {
+        width: 16px;
+      }
+      
+    &::-webkit-scrollbar-track {
+        -webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, 0.2) inset;
+        background-color: #ebedc2;
+        border-radius: 10px;
+      }
+      
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background: linear-gradient(180deg, #00c6fb, #005bea);
+      }
+    &_main {
+        display: flex;
+        justify-content: space-between;
+    }
+    &_input {
+        display: flex;
+        justify-content: space-around;
+        flex-direction: column;
+        flex-wrap: wrap;
+        flex: 1;
+        gap: 20px;
+    }
+    &_button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      button {
+        width: 120px;
+        height: 100%;
+        font-size: 20px;
+      }
+    }
+}

@@ -1,0 +1,22 @@
+.button {
+    width: 100px;
+    height: 30px;
+    border-radius: 15px;
+    background-color: rgb(255, 180, 0);
+    color: #000;
+    cursor: pointer;
+    &_item {
+        max-width: 100px;
+        height: 40px;
+        border-radius: 15px;
+        background-color: #fff;
+        color: #000;
+        cursor: pointer;
+    }
+    &_complete {
+        color: rgb(120, 250, 0);
+    }
+    &_delete {
+        color: rgb(255, 0, 0);
+    }
+}
